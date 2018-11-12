@@ -10,6 +10,18 @@
         };
     }
     
+    /**
+     * 获取浏览器信息
+     * @param {String} ua 浏览器userAgent
+     * @returns {Object} browser 浏览器信息对象
+     * - {String} browser.name  浏览器名
+     * - {boolean} browser[厂商名] 是不是某个浏览器
+     * - {Object} browser.version   浏览器版本对象
+     *  - {String} browser.version.info 浏览器版本信息字符 1.0.0
+     *  - {String} browser.version.major 主版本号
+     *  - {String} browser.version.minor 次版本号
+     *  - {String} browser.version.patch 补丁版本号
+     */
     function checkUserAgent(ua) {
         var browser = {};
         var match = /(dolfin)[ \/]([\w.]+)/.exec( ua ) ||
@@ -41,6 +53,15 @@
         return browser;
     }
 
+    /**
+     * 获取userAgent中的版本信息对象形式
+     * @param {String} versionString userAgent中的版本信息
+     * @returns {Object} version 浏览器版本对象
+     *  - {String} version.info 浏览器版本信息字符 1.0.0
+     *  - {String} version.major 主版本号
+     *  - {String} version.minor 次版本号
+     *  - {String} version.patch 补丁版本号
+     */
     function setVersion(versionString) {
         var version = {};
 
@@ -53,6 +74,11 @@
         return version;
     }
 
+    /**
+     * 获取设备平台
+     * @param {String} ua 浏览器userAgent
+     * @returns {String} 'pc'|'tablet'|'mobile'|''
+     */
     function checkPlatform (ua) {
         if (isPc(ua)) {
             return "pc";
@@ -64,18 +90,36 @@
             return "";
         }
     }
+
+    /**
+     * 是否为pc端
+     * @param {String} ua 浏览器userAgent
+     * @returns {boolean} 是否为pc
+     */
     function isPc (ua) {
         if (ua.match(/linux|windows (nt|98)|macintosh|cros/) && !ua.match(/android|mobile|polaris|lgtelecom|uzard|natebrowser|ktf;|skt;/)) {
             return true;
         }
         return false;
     }
+
+    /**
+     * 是否为平板
+     * @param {String} ua 浏览器userAgent
+     * @returns {boolean} 是否为平板
+     */
     function isTablet (ua) {
         if (ua.match(/ipad/) || (ua.match(/android/) && !ua.match(/mobi|mini|fennec/))) {
             return true;
         }
         return false;
     }
+
+    /**
+     * 是否为手机
+     * @param {String} ua 浏览器userAgent
+     * @returns {boolean} 是否为手机
+     */
     function isMobile (ua) {
         if (!!ua.match(/ip(hone|od)|android.+mobile|windows (ce|phone)|blackberry|bb10|symbian|webos|firefox.+fennec|opera m(ob|in)i|tizen.+mobile|polaris|iemobile|lgtelecom|nokia|sonyericsson|dolfin|uzard|natebrowser|ktf;|skt;/)) {
             return true;
@@ -84,6 +128,19 @@
         }
     }
 
+    /**
+     * 获取操作系统信息
+     * @param {String} ua 浏览器userAgent
+     * @returns {Object} os 操作系统信息
+     * - {String} os.name 操作系统名
+     * - {Object} os.version 版本
+     * - {boolean} os[osname] 是不是某个操作系统
+     * - {Object} os.version
+     *  - {String} os.version.info 操作系统版本信息字符 1.0.0
+     *  - {String} os.version.major 主版本号
+     *  - {String} os.version.minor 次版本号
+     *  - {String} os.version.patch 补丁版本号
+     */
     function checkOs (ua) {
         var os = {},
             match = /(iphone|ipad|ipod)[\S\s]*os ([\w._\-]+) like/.exec(ua) ||
@@ -117,6 +174,19 @@
     }
 
     var baseAppList = ['crios', 'fxios', 'daumapps'];
+    /**
+     * app信息
+     * @param {String} ua userAgent
+     * @param {Array|String} customAppList 要检测的app ua标识列表, 一个可以是字符串
+     * @returns {Object} app app信息
+     * - {boolean} app.isApp 是否为要检测app加默认三个中的一个
+     * - {String} app.name app名字
+     * - {boolean} app.version 是不是某个操作系统
+     *  - {String} app.version.info 操作系统版本信息字符 1.0.0
+     *  - {String} app.version.major 主版本号
+     *  - {String} app.version.minor 次版本号
+     *  - {String} app.version.patch 补丁版本号
+     */
     function checkApp (ua, customAppList) {
         var app = {},
             match = null,
@@ -152,6 +222,11 @@
         return app;
     }
 
+    /**
+     * 获取ua的小写形式
+     * @param {[String]} ua 浏览器userAgent信息, 可选
+     * @returns {String} ua的小写形式
+     */
     function getLowerUserAgent(ua) {
         var lowerUa = '';
         if (!ua) {
@@ -167,6 +242,12 @@
         return lowerUa;
     }
 
+    /**
+     * 获取ua,浏览器信息,操作系统信息,app信息, 平台信息
+     * @param {String} ua 浏览器userAgent信息, 可选
+     * @param {Array|String} customAppList 要检测的app ua标识列表, 一个可以是字符串
+     * @returns {Object}
+     */
     var userAgent = exports.userAgent = function (ua, customAppList) {
         var lowerUa = getLowerUserAgent(ua);
         
